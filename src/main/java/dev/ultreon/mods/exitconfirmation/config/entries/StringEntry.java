@@ -1,6 +1,6 @@
-package com.ultreon.mods.exitconfirmation.config.entries;
+package dev.ultreon.mods.exitconfirmation.config.entries;
 
-import com.ultreon.mods.exitconfirmation.config.ConfigEntry;
+import dev.ultreon.mods.exitconfirmation.config.ConfigEntry;
 
 public class StringEntry extends ConfigEntry<String> {
     public StringEntry(String key, String value) {

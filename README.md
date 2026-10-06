@@ -1,2 +1,2 @@
-# exit-confirmation
-Exit Confirmation mod for Minecraft.
+# Exit Confirmation
+Exit confirmation mod for Minecraft.

@@ -1,10 +1,13 @@
-package com.ultreon.mods.exitconfirmation;
+package dev.ultreon.mods.exitconfirmation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.util.Language;
+import net.minecraft.util.ProgressListener;
+import net.minecraft.world.World;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Environment(EnvType.CLIENT)
@@ -17,6 +20,7 @@ public class ConfirmExitScreen extends Screen {
 
     public ConfirmExitScreen(Screen previousScreen) {
         super();
+        this.previousScreen = previousScreen;
     }
 
     @Override
@@ -25,8 +29,8 @@ public class ConfirmExitScreen extends Screen {
 
         this.buttons.clear();
 
-        this.buttons.add(yesButton = new ButtonWidget(0, this.width / 2 - 105, this.height / 6 + 96, 100, 20, Language.getInstance().translate("gui.yes")));
-        this.buttons.add(new ButtonWidget(1, this.width / 2 + 5, this.height / 6 + 96, 100, 20, Language.getInstance().translate("gui.no")));
+        this.buttons.add(yesButton = new ExitButtonWidget(0, this.width / 2 - 105, this.height / 6 + 96, "Yes"));
+        this.buttons.add(new ExitButtonWidget(1, this.width / 2 + 5, this.height / 6 + 96, "No"));
 
         yesButton.active = false;
 
@@ -36,19 +40,21 @@ public class ConfirmExitScreen extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if (button.id == 0) {
-            if (this.mc != null) {
+            if (this.minecraft != null) {
                 button.active = false;
-                if (this.mc.world != null && this.mc.isIntegratedServerRunning()) {
-                    WorldUtils.saveWorldThenQuitGame();
-                    return;
+                World world = this.minecraft.world;
+                if (world != null) {
+                    world.forceSave(minecraft.progressRenderer);
                 }
 
-                this.mc.scheduleStop();
+                this.minecraft.stop();
+                this.minecraft.shutdown();
+                AppletJFrame.getInstance().dispose();
             }
         } else if (button.id == 1) {
-            if (this.mc != null) {
+            if (this.minecraft != null) {
                 button.active = false;
-                this.mc.openScreen(this.previousScreen);
+                this.minecraft.openScreen(this.previousScreen);
             }
         }
     }
@@ -74,12 +80,15 @@ public class ConfirmExitScreen extends Screen {
     @Override
     public void tick() {
         if (this.ticksUntilEnableIn-- <= 0) {
-            yesButton.active = true;
+            ButtonWidget yesButton1 = yesButton;
+            if (yesButton1 != null) {
+                yesButton1.active = true;
+            }
         }
     }
 
     public void back() {
-        this.mc.openScreen(this.previousScreen);
+        this.minecraft.openScreen(this.previousScreen);
     }
 
     @Override

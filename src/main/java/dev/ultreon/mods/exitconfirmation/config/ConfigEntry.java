@@ -1,6 +1,5 @@
-package com.ultreon.mods.exitconfirmation.config;
+package dev.ultreon.mods.exitconfirmation.config;
 
-import net.minecraft.util.Language;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ConfigEntry<T> {
@@ -46,9 +45,5 @@ public abstract class ConfigEntry<T> {
 
     public String write() {
         return this.value.toString();
-    }
-
-    public String getDescription() {
-        return Language.getInstance().translate("exit_confirm.config." + this.key);
     }
 }
