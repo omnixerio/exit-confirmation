@@ -4,9 +4,11 @@ import dev.ultreon.mods.exitconfirmation.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.event.WindowListener;
 import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class ExitConfirmation implements ClientModInitializer {
     public static Minecraft minecraft;
@@ -17,8 +19,9 @@ public class ExitConfirmation implements ClientModInitializer {
 
     // Directly reference a log4j logger.
     @SuppressWarnings("unused")
-    static final Logger LOGGER = LogManager.getLogManager().getLogger("ExitConfirmation");
+    public static final Logger LOGGER = LoggerFactory.getLogger("ExitConfirmation");
     public static int open = -1;
+    public static WindowListener[] listeners;
     private static ExitConfirmation instance;
 
     public static ExitConfirmation getInstance() {

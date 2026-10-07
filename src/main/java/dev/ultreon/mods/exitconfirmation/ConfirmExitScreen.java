@@ -7,6 +7,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.locale.Language;
 
+import java.awt.event.WindowListener;
+
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Environment(EnvType.CLIENT)
 public class ConfirmExitScreen extends Screen {
@@ -45,13 +47,15 @@ public class ConfirmExitScreen extends Screen {
                     return;
                 }
 
-                AppletLauncher applet = AppletJFrame.getInstance().getApplet();
-                if (applet != null) {
-                    applet.stop();
-                    applet.destroy();
+                for (WindowListener listener : ExitConfirmation.listeners) {
+                    listener.windowClosing(null);
                 }
 
-                Runtime.getRuntime().halt(0);
+                if (ExitConfirmation.minecraft != null) {
+                    ExitConfirmation.minecraft.shutdown();
+                }
+
+                System.exit(0);
             }
         } else if (button.id == 1) {
             if (this.minecraft != null) {

@@ -19,11 +19,7 @@ import java.awt.*;
 public abstract class MinecraftMixin {
 	@Inject(method = "<init>", at = @At("HEAD"))
 	private static void exampleMod$onInit(Component component, Canvas canvas, MinecraftApplet applet, int width, int height, boolean fullscreen, CallbackInfo ci) {
-		AppletLauncher launcher = (AppletLauncher) component.getParent();
-		Container launcherParent = launcher.getParent();
-		if (launcherParent instanceof AppletFrame) {
-			throw new Error("ExitConfirmation");
-		}
+
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))
