@@ -1,7 +1,6 @@
 package dev.ultreon.mods.exitconfirmation.mixin.client;
 
 import dev.ultreon.mods.exitconfirmation.*;
-import dev.ultreon.mods.exitconfirmation.provider.AppletJFrame;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.menu.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -18,17 +17,7 @@ public abstract class TitleScreenMixin extends Screen {
         if (button.id == 4) {
             if (ExitConfirmation.getInstance().onWindowClose(WindowCloseEvent.Source.QUIT_BUTTON) == ActionResult.CANCEL) {
                 ci.cancel();
-                return;
             }
-            ExitConfirmation.allowExit = true;
-            minecraft.stop();
-            minecraft.shutdown();
-
-            AppletJFrame.getInstance().getApplet().stop();
-            AppletJFrame.getInstance().getApplet().destroy();
-            AppletJFrame.getInstance().dispose();
-
-            Runtime.getRuntime().halt(0);
         }
     }
 

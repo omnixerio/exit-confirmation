@@ -6,7 +6,6 @@
   "mixins": [
   ],
   "client": [
-    "client.accessor.MinecraftAccessor",
     "client.MinecraftAppletMixin",
     "client.MinecraftMixin",
     "client.TitleScreenMixin"

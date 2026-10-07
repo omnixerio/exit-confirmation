@@ -1,11 +1,12 @@
 package dev.ultreon.mods.exitconfirmation;
 
-import dev.ultreon.mods.exitconfirmation.provider.AppletJFrame;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.locale.Language;
+
+import java.awt.event.WindowListener;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Environment(EnvType.CLIENT)
@@ -44,14 +45,11 @@ public class ConfirmExitScreen extends Screen {
                     return;
                 }
 
-                this.minecraft.stop();
-                this.minecraft.shutdown();
+                if (ExitConfirmation.minecraft != null) {
+                    ExitConfirmation.minecraft.shutdown();
+                }
 
-                AppletJFrame.getInstance().getApplet().stop();
-                AppletJFrame.getInstance().getApplet().destroy();
-                AppletJFrame.getInstance().dispose();
-
-                Runtime.getRuntime().halt(0);
+                System.exit(0);
             }
         } else if (button.id == 1) {
             if (this.minecraft != null) {

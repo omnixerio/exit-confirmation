@@ -1,9 +1,10 @@
 package dev.ultreon.mods.exitconfirmation;
 
-import dev.ultreon.mods.exitconfirmation.provider.AppletJFrame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.menu.TitleScreen;
+
+import java.awt.event.WindowListener;
 
 public final class WorldUtils {
     public static void saveWorldThenOpenTitle() {
@@ -30,14 +31,9 @@ public final class WorldUtils {
 
     public static void saveWorldThenQuitGame() {
         saveWorldThen(() -> {
-            ExitConfirmation.minecraft.stop();
             ExitConfirmation.minecraft.shutdown();
 
-            AppletJFrame.getInstance().getApplet().stop();
-            AppletJFrame.getInstance().getApplet().destroy();
-            AppletJFrame.getInstance().dispose();
 
-            Runtime.getRuntime().halt(0);
         });
     }
 }
