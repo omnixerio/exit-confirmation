@@ -1,8 +1,7 @@
-package com.ultreon.mods.exitconfirmation;
+package dev.ultreon.mods.exitconfirmation;
 
-import com.ultreon.mods.exitconfirmation.config.Config;
+import dev.ultreon.mods.exitconfirmation.config.Config;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.impl.util.log.Log;
 import net.minecraft.client.Minecraft;
 
 import java.util.logging.LogManager;
@@ -17,10 +16,22 @@ public class ExitConfirmation implements ClientModInitializer {
     // Directly reference a log4j logger.
     @SuppressWarnings("unused")
     static final Logger LOGGER = LogManager.getLogManager().getLogger("ExitConfirmation");
+    public static Minecraft minecraft;
     private static ExitConfirmation instance;
+    public static int open = -1;
 
     public static ExitConfirmation getInstance() {
         return ExitConfirmation.instance;
+    }
+
+    public static void tick() {
+        if (open == 0) {
+            minecraft.unlockMouse();
+            minecraft.openScreen(new ConfirmExitScreen(minecraft.screen));
+            open--;
+        } else if (open >= 1) {
+            open--;
+        }
     }
 
     @Override
@@ -32,26 +43,26 @@ public class ExitConfirmation implements ClientModInitializer {
     }
 
     public ActionResult onWindowClose(WindowCloseEvent.Source source) {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft minecraft = ExitConfirmation.minecraft;
 
         // Check close source.
         if (source == WindowCloseEvent.Source.GENERIC) {
             // Always cancel if the world isn't loaded but also being ingame. (Fixes bug)
-            if (mc.world == null && mc.currentScreen == null) {
+            if (minecraft.world == null && minecraft.screen == null) {
                 return ActionResult.CANCEL;
             }
 
             // Otherwise only cancel when the close prompt is enabled.
             if (ExitConfirmation.CONFIG.closePrompt.get()) {
                 // Allow closing ingame if enabled in config.
-                if (mc.world != null && !ExitConfirmation.CONFIG.closePromptInGame.get()) {
+                if (minecraft.world != null && !ExitConfirmation.CONFIG.closePromptInGame.get()) {
                     return ActionResult.PASS;
                 }
 
                 // Only show screen, when the screen isn't the confirmation screen yet.
-                if (!(mc.currentScreen instanceof ConfirmExitScreen)) {
+                if (!(minecraft.screen instanceof ConfirmExitScreen)) {
                     // Set the screen.
-                    mc.openScreen(new ConfirmExitScreen(mc.currentScreen));
+                    minecraft.openScreen(new ConfirmExitScreen(minecraft.screen));
                 }
 
                 // Cancel the event.
@@ -59,8 +70,8 @@ public class ExitConfirmation implements ClientModInitializer {
             }
         } else if (source == WindowCloseEvent.Source.QUIT_BUTTON) {
             // Cancel quit button when set in config, and the screen isn't currently the confirmation screen already.
-            if (ExitConfirmation.CONFIG.closePrompt.get() && ExitConfirmation.CONFIG.closePromptQuitButton.get() && !(mc.currentScreen instanceof ConfirmExitScreen)) {
-                mc.openScreen(new ConfirmExitScreen(mc.currentScreen));
+            if (ExitConfirmation.CONFIG.closePrompt.get() && ExitConfirmation.CONFIG.closePromptQuitButton.get() && !(minecraft.screen instanceof ConfirmExitScreen)) {
+                minecraft.openScreen(new ConfirmExitScreen(minecraft.screen));
                 return ActionResult.CANCEL;
             }
         }

@@ -1,7 +1,7 @@
-package com.ultreon.mods.exitconfirmation.config;
+package dev.ultreon.mods.exitconfirmation.config;
 
-import com.ultreon.mods.exitconfirmation.OrderedHashMap;
-import com.ultreon.mods.exitconfirmation.config.entries.*;
+import dev.ultreon.mods.exitconfirmation.OrderedHashMap;
+import dev.ultreon.mods.exitconfirmation.config.entries.*;
 
 import java.io.*;
 import java.util.UUID;

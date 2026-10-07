@@ -1,11 +1,9 @@
-package com.ultreon.mods.exitconfirmation.mixin;
+package dev.ultreon.mods.exitconfirmation.mixin.client;
 
-import com.ultreon.mods.exitconfirmation.ActionResult;
-import com.ultreon.mods.exitconfirmation.ConfirmExitScreen;
-import com.ultreon.mods.exitconfirmation.ExitConfirmation;
-import com.ultreon.mods.exitconfirmation.WindowCloseEvent;
+import dev.ultreon.mods.exitconfirmation.*;
+import dev.ultreon.mods.exitconfirmation.provider.AppletJFrame;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.gui.screen.menu.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,15 +21,22 @@ public abstract class TitleScreenMixin extends Screen {
                 return;
             }
             ExitConfirmation.allowExit = true;
-            mc.scheduleStop();
+            minecraft.stop();
+            minecraft.shutdown();
+
+            AppletJFrame.getInstance().getApplet().stop();
+            AppletJFrame.getInstance().getApplet().destroy();
+            AppletJFrame.getInstance().dispose();
+
+            Runtime.getRuntime().halt(0);
         }
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    public void exitConfirm$injectEscapePrompt(char id, int code, CallbackInfo ci) {
-        if (code == Keyboard.KEY_ESCAPE && ExitConfirmation.CONFIG.closePrompt.get() && ExitConfirmation.CONFIG.quitOnEscInTitle.get()) {
-            if (this.mc.currentScreen == this) {
-                this.mc.openScreen(new ConfirmExitScreen(this.mc.currentScreen));
+    public void exitConfirm$injectEscapePrompt(char chr, int key, CallbackInfo ci) {
+        if (key == Keyboard.KEY_ESCAPE && ExitConfirmation.CONFIG.closePrompt.get() && ExitConfirmation.CONFIG.quitOnEscInTitle.get()) {
+            if (this.minecraft.screen == this) {
+                this.minecraft.openScreen(new ConfirmExitScreen(this.minecraft.screen));
                 ci.cancel();
             }
         }

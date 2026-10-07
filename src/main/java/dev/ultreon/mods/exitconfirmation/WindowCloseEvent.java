@@ -1,4 +1,4 @@
-package com.ultreon.mods.exitconfirmation;
+package dev.ultreon.mods.exitconfirmation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

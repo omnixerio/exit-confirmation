@@ -1,12 +1,14 @@
 {
-  "package": "com.ultreon.mods.exitconfirmation.mixin",
+  "package": "dev.ultreon.mods.exitconfirmation.mixin",
   "refmap": "mixins.exit-confirmation.refmap.json",
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-    "MinecraftMixin",
-    "TitleScreenMixin"
+    "client.accessor.MinecraftAccessor",
+    "client.MinecraftAppletMixin",
+    "client.MinecraftMixin",
+    "client.TitleScreenMixin"
   ]
 }

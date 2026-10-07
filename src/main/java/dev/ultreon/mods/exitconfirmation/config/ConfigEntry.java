@@ -1,6 +1,6 @@
-package com.ultreon.mods.exitconfirmation.config;
+package dev.ultreon.mods.exitconfirmation.config;
 
-import net.minecraft.util.Language;
+import net.minecraft.locale.Language;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ConfigEntry<T> {

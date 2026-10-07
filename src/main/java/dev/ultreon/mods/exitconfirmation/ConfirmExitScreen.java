@@ -1,10 +1,11 @@
-package com.ultreon.mods.exitconfirmation;
+package dev.ultreon.mods.exitconfirmation;
 
+import dev.ultreon.mods.exitconfirmation.provider.AppletJFrame;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.util.Language;
+import net.minecraft.locale.Language;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Environment(EnvType.CLIENT)
@@ -36,19 +37,26 @@ public class ConfirmExitScreen extends Screen {
     @Override
     protected void buttonClicked(ButtonWidget button) {
         if (button.id == 0) {
-            if (this.mc != null) {
+            if (this.minecraft != null) {
                 button.active = false;
-                if (this.mc.world != null && this.mc.isIntegratedServerRunning()) {
+                if (this.minecraft.world != null) {
                     WorldUtils.saveWorldThenQuitGame();
                     return;
                 }
 
-                this.mc.scheduleStop();
+                this.minecraft.stop();
+                this.minecraft.shutdown();
+
+                AppletJFrame.getInstance().getApplet().stop();
+                AppletJFrame.getInstance().getApplet().destroy();
+                AppletJFrame.getInstance().dispose();
+
+                Runtime.getRuntime().halt(0);
             }
         } else if (button.id == 1) {
-            if (this.mc != null) {
+            if (this.minecraft != null) {
                 button.active = false;
-                this.mc.openScreen(this.previousScreen);
+                this.minecraft.openScreen(this.previousScreen);
             }
         }
     }
@@ -79,7 +87,7 @@ public class ConfirmExitScreen extends Screen {
     }
 
     public void back() {
-        this.mc.openScreen(this.previousScreen);
+        this.minecraft.openScreen(this.previousScreen);
     }
 
     @Override
