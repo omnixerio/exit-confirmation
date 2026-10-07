@@ -17,28 +17,8 @@ import java.awt.*;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
-
-	@Shadow
-	public abstract void shutdown();
-
-	@Shadow
-	public abstract void stop();
-
 	@Inject(method = "<init>", at = @At("CTOR_HEAD"))
 	private void exampleMod$onInit(Component component, Canvas canvas, MinecraftApplet applet, int width, int height, boolean fullscreen, CallbackInfo ci) {
-		stop();
-        AppletLauncher launcher = (AppletLauncher) component.getParent();
-		Container launcherParent = launcher.getParent();
-		if (launcherParent instanceof AppletFrame) {
-			AppletFrame frame = (AppletFrame) launcherParent;
-			frame.dispose();
-			AppletJFrame minecraft = new AppletJFrame("Minecraft", null);
-			String[] launchArguments = FabricLoader.getInstance().getLaunchArguments(false);
-
-			minecraft.launch(launchArguments);
-
-			throw new Error(); // FIXME: Find a better way to prevent Minecraft from starting
-		}
 		ExitConfirmation.minecraft = (Minecraft) (Object) this;
 	}
 

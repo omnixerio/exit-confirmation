@@ -3,12 +3,10 @@
   "minVersion": "0.8",
   "package": "dev.ultreon.mods.exitconfirmation.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [],
-  "client": [
-    "accessor.MinecraftAccessor",
-    "MinecraftMixin"
-  ],
-  "server": [
+  "mixins": [
+    "MinecraftAppletMixin",
+    "MinecraftMixin",
+    "accessor.MinecraftAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

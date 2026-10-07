@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
+import java.awt.event.WindowListener;
+
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Environment(EnvType.CLIENT)
 public class ConfirmExitScreen extends Screen {
@@ -47,9 +49,15 @@ public class ConfirmExitScreen extends Screen {
                     world.forceSave(minecraft.progressRenderer);
                 }
 
-                this.minecraft.stop();
-                this.minecraft.shutdown();
-                AppletJFrame.getInstance().dispose();
+                for (WindowListener listener : ExitConfirmation.listeners) {
+                    listener.windowClosing(null);
+                }
+
+                if (ExitConfirmation.minecraft != null) {
+                    ExitConfirmation.minecraft.shutdown();
+                }
+
+                System.exit(0);
             }
         } else if (button.id == 1) {
             if (this.minecraft != null) {
